@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../widgets/bottomNavbar.dart';
-import '../../constants.dart';
-import 'detail.dart';
+import 'pages/widgets/bottomNavbar.dart';
+import 'constants.dart';
+import 'pages/product/detail.dart';
 
 // ─── App Root ──────────────────────────────────────────────────────────────────
 

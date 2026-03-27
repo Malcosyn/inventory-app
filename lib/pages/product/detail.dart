@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/bottomNavbar.dart';
 import '../../constants.dart';
+import 'edit.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Product product;
@@ -16,8 +17,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int _quantity = 1;
 
   Product get p => widget.product;
-
-  // ── Status helpers ──────────────────────────────────────────────────────────
 
   Color get _statusBg {
     switch (p.status) {
@@ -73,7 +72,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         backgroundColor: kBackground,
         body: CustomScrollView(
           slivers: [
-            // ── App Bar dengan gambar ─────────────────────────────────────
             SliverAppBar(
               expandedHeight: 300,
               pinned: true,
@@ -132,7 +130,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 background: Stack(
                   fit: StackFit.expand,
                   children: [
-                    // Gambar produk
                     Image.network(
                       p.imageUrl,
                       fit: BoxFit.cover,
@@ -163,7 +160,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         );
                       },
                     ),
-                    // Gradient bawah
                     Positioned(
                       bottom: 0,
                       left: 0,
@@ -182,7 +178,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                       ),
                     ),
-                    // Status badge
                     Positioned(
                       bottom: 16,
                       left: 20,
@@ -221,14 +216,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ),
 
-            // ── Konten detail ─────────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Nama & Harga
+                    // Name & Price
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -284,7 +278,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
                     const SizedBox(height: 24),
 
-                    // ── Info Cards ──────────────────────────────────────────
+                    // Info Cards
                     Row(
                       children: [
                         Expanded(
@@ -308,7 +302,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         Expanded(
                           child: _InfoCard(
                             icon: Icons.category_outlined,
-                            label: 'Kategori',
+                            label: 'Category',
                             value: p.category.split(' ').first,
                             color: Colors.deepOrange.shade300,
                           ),
@@ -317,12 +311,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
 
                     const SizedBox(height: 24),
-
-                    // ── Divider ─────────────────────────────────────────────
                     Divider(color: Colors.grey.shade200),
                     const SizedBox(height: 16),
 
-                    // ── Update Stock Section ────────────────────────────────
+                    // ── UPDATE STOCK ──────────────────────────────────────
                     const Text(
                       'UPDATE STOCK',
                       style: TextStyle(
@@ -333,6 +325,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                     ),
                     const SizedBox(height: 12),
+
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -348,7 +341,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                       child: Row(
                         children: [
-                          // Tombol kurang
                           _QtyButton(
                             icon: Icons.remove,
                             onTap: () {
@@ -366,7 +358,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               ),
                             ),
                           ),
-                          // Tombol tambah
                           _QtyButton(
                             icon: Icons.add,
                             onTap: () => setState(() => _quantity++),
@@ -378,18 +369,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
                     const SizedBox(height: 12),
 
-                    // Tombol tambah & kurang stok
                     Row(
                       children: [
                         Expanded(
                           child: _ActionButton(
-                            label: 'Kurangi Stok',
+                            label: 'Reduce Stock',
                             icon: Icons.remove_circle_outline,
                             color: Colors.red.shade400,
                             bgColor: Colors.red.shade50,
                             onTap: () => _showStockSnackbar(
                               context,
-                              'kurang',
+                              'reduce',
                               _quantity,
                             ),
                           ),
@@ -397,7 +387,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: _ActionButton(
-                            label: 'Tambah Stok',
+                            label: 'Add Stock',
                             icon: Icons.add_circle_outline,
                             color: kPrimaryDark,
                             bgColor: kPrimary.withOpacity(0.12),
@@ -415,9 +405,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     Divider(color: Colors.grey.shade200),
                     const SizedBox(height: 16),
 
-                    // ── Detail Info ─────────────────────────────────────────
+                    // ── PRODUCT INFORMATION ───────────────────────────────
                     const Text(
-                      'INFORMASI PRODUK',
+                      'PRODUCT INFORMATION',
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
@@ -440,16 +430,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                       child: Column(
                         children: [
-                          _DetailRow(label: 'Nama Produk', value: p.name),
+                          _DetailRow(label: 'Product Name', value: p.name),
                           _DetailRow(label: 'SKU / ID', value: p.id),
-                          _DetailRow(label: 'Kategori', value: p.category),
+                          _DetailRow(label: 'Category', value: p.category),
                           _DetailRow(
-                            label: 'Harga',
+                            label: 'Price',
                             value: '\$${p.price.toStringAsFixed(2)}',
                           ),
                           _DetailRow(
-                            label: 'Stok Tersedia',
-                            value: '${p.units} unit',
+                            label: 'Available Stock',
+                            value: '${p.units} units',
                           ),
                           _DetailRow(
                             label: 'Status',
@@ -463,14 +453,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
                     const SizedBox(height: 24),
 
-                    // ── Tombol Edit & Hapus ─────────────────────────────────
+                    // ── Edit & Delete Buttons ─────────────────────────────
                     Row(
                       children: [
                         Expanded(
                           child: OutlinedButton.icon(
-                            onPressed: () {},
+                            onPressed: () =>
+                                EditProductSheet.show(context, p),
                             icon: const Icon(Icons.edit_outlined, size: 16),
-                            label: const Text('Edit Produk'),
+                            label: const Text('Edit Product'),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: kPrimaryDark,
                               side: const BorderSide(color: kPrimary),
@@ -489,7 +480,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         OutlinedButton.icon(
                           onPressed: () => _confirmDelete(context),
                           icon: const Icon(Icons.delete_outline, size: 16),
-                          label: const Text('Hapus'),
+                          label: const Text('Delete'),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: Colors.red,
                             side: BorderSide(color: Colors.red.shade200),
@@ -531,7 +522,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
             const SizedBox(width: 8),
             Text(
-              '${isAdd ? 'Menambahkan' : 'Mengurangi'} $qty unit stok ${p.name}',
+              '${isAdd ? 'Added' : 'Reduced'} $qty units of ${p.name}',
               style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
             ),
           ],
@@ -574,12 +565,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
             const SizedBox(height: 16),
             const Text(
-              'Hapus Produk?',
+              'Delete Product?',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 8),
             Text(
-              'Produk "${p.name}" akan dihapus permanen\ndari inventaris.',
+              '"${p.name}" will be permanently deleted\nfrom your inventory.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 13,
@@ -601,7 +592,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       side: BorderSide(color: Colors.grey.shade300),
                     ),
                     child: Text(
-                      'Batal',
+                      'Cancel',
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         color: Colors.grey.shade700,
@@ -626,7 +617,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                     ),
                     child: const Text(
-                      'Hapus',
+                      'Delete',
                       style: TextStyle(fontWeight: FontWeight.w700),
                     ),
                   ),
@@ -665,22 +656,25 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             const SizedBox(height: 16),
             _OptionTile(
               icon: Icons.edit_outlined,
-              label: 'Edit Produk',
-              onTap: () => Navigator.pop(context),
+              label: 'Edit Product',
+              onTap: () {
+                Navigator.pop(context);
+                EditProductSheet.show(context, p);
+              },
             ),
             _OptionTile(
               icon: Icons.qr_code_outlined,
-              label: 'Lihat Barcode',
+              label: 'View Barcode',
               onTap: () => Navigator.pop(context),
             ),
             _OptionTile(
               icon: Icons.share_outlined,
-              label: 'Bagikan',
+              label: 'Share',
               onTap: () => Navigator.pop(context),
             ),
             _OptionTile(
               icon: Icons.delete_outline,
-              label: 'Hapus Produk',
+              label: 'Delete Product',
               color: Colors.red,
               onTap: () {
                 Navigator.pop(context);

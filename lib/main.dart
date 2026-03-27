@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/inventory/inventory.dart';
+import 'inventory.dart';
 
 
 void main() {
