@@ -13,9 +13,17 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failures, String>> signInWithEmailPassword({
     required String email,
     required String password,
-  }) {
-    // TODO: implement signInWithEmailPassword
-    throw UnimplementedError();
+  }) async {
+    try {
+      final userId = await supabaseDataSource.signInWithEmailPassword(
+        email: email,
+        password: password,
+      );
+
+      return right(userId);
+    } on ServerException catch (e) {
+      return left(Failures(e.message));
+    }
   }
 
   @override
